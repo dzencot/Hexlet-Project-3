@@ -1,6 +1,9 @@
 install:
 	npm install
 
+run:
+	npm run babel-node -- ./src/bin/page_loader.js $(1)
+
 lint:
 	npm run eslint ./
 

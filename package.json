@@ -1,7 +1,7 @@
 {
-  "name": "empty_project",
+  "name": "dzencot-page-loader-01",
   "version": "1.0.0",
-  "description": "",
+  "description": "project#3 for Hexlet.io",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dzencot/empty_project.git"
+    "url": "git+https://github.com/dzencot/project-lvl3-s71.git"
   },
   "author": "Ivan Gagrinov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dzencot/empty_project/issues"
+    "url": "https://github.com/dzencot/project-lvl3-s71/issues"
   },
-  "homepage": "https://github.com/dzencot/empty_project#readme",
+  "homepage": "https://github.com/dzencot/project-lvl3-s71#readme",
   "devDependencies": {
     "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
@@ -41,6 +41,12 @@
     "eslint-plugin-import": "^2.2.0",
     "flow": "^0.2.3",
     "flow-typed": "^2.0.0",
-    "jest": "^19.0.2"
+    "jest": "^19.0.2",
+    "nock": "^9.0.13"
+  },
+  "dependencies": {
+    "axios": "^0.16.1",
+    "commander": "^2.9.0",
+    "mz": "^2.6.0"
   }
 }
