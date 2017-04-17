@@ -3,3 +3,7 @@ node_js:
   - stable
 
 script: make lint test
+
+addons:
+  conde_climate:
+    repo_token: 18861d44184ba1c17cd0128234036471ae2fcf978e8a3e9f81c02e15dd8b130b
