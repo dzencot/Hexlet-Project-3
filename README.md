@@ -13,7 +13,7 @@ Status](https://travis-ci.org/dzencot/project-lvl3-s71.svg?branch=master)](https
   cd page_loader
   make install
 ```
-## Use: ##
+## Usage: ##
 ```
   make run 1=http://your_page
 ```

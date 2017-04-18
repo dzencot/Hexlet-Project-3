@@ -6,14 +6,14 @@ import tagsLoad from './listSrc';
 
 export default (page, dir) => {
   const $ = cheerio.load(page);
-  tagsLoad().map((tagLoad) => {
+  tagsLoad().forEach((tagLoad) => {
     const links = $('html').find(tagLoad.name);
-    return links.filter(tag => $(links[tag]).attr(tagLoad.src))
-    .map((tag) => {
-      const currentHref = $(links[tag]).attr(tagLoad.src);
-      const localHref = path.join(dir.split(path.sep).pop(), path.basename(currentHref));
-      links[tag].attribs[tagLoad.src] = localHref;
-      return links[tag];
+    links.each((i) => {
+      if ($(links[i]).attr(tagLoad.src)) {
+        const localHref = path.join(dir,
+          path.basename($(links[i]).attr(tagLoad.src)));
+        $(links[i]).attr(tagLoad.src, localHref);
+      }
     });
   });
   return $.html();
