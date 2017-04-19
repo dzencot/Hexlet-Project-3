@@ -13,10 +13,13 @@ describe('test pageLoader', () => {
   let testPageDir;
   let pageLoaded;
   let nameFile1;
+  let nameFile1Loaded;
   let dataFile1;
   let nameFile2;
+  let nameFile2Loaded;
   let dataFile2;
   let nameFile3;
+  let nameFile3Loaded;
   let dataFile3;
   let page;
 
@@ -39,10 +42,13 @@ describe('test pageLoader', () => {
 </html>
 `;
     nameFile1 = 'application-4a22ec64913e57f9d297149cd20cb001db20febca800210f48729059b5103819.js';
+    nameFile1Loaded = 'localhost-test-page-files-application-4a22ec64913e57f9d297149cd20cb001db20febca800210f48729059b5103819-js.js';
     dataFile1 = fs.readFileSync(path.resolve(testPageDir, 'test-page_files', nameFile1));
     nameFile2 = 'favicon-196x196-422632c0ef41e9b13dd7ea89f1764e860d225ca3c20502b966a00c0039409a75.png';
+    nameFile2Loaded = 'localhost-test-page-files-favicon-196x196-422632c0ef41e9b13dd7ea89f1764e860d225ca3c20502b966a00c0039409a75-png.png';
     dataFile2 = fs.readFileSync(path.resolve(testPageDir, 'test-page_files', nameFile2));
     nameFile3 = 'favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6.ico';
+    nameFile3Loaded = 'localhost-test-page-files-favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6-ico.ico';
     dataFile3 = fs.readFileSync(path.resolve(testPageDir, 'test-page_files', nameFile3));
     page = fs.readFileSync(path.resolve(testPageDir, 'test_page.html'));
   });
@@ -64,11 +70,11 @@ describe('test pageLoader', () => {
     pageLoader(address, dir)
     .then(() => fs.readFile(path.resolve(dir, 'localhost-test.html'), 'utf8'))
     .then(data => expect(data).toBe(pageLoaded))
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile1)))
+    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile1Loaded)))
     .then(file1 => expect(file1.data).toBe(dataFile1.data))
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile2)))
+    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile2Loaded)))
     .then(file2 => expect(file2.data).toBe(dataFile2.data))
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile3)))
+    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile3Loaded)))
     .then(file3 => expect(file3.data).toBe(dataFile3.data))
     .catch((err) => {
       console.log(err);

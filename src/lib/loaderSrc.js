@@ -5,6 +5,7 @@ import path from 'path';
 import url from 'url';
 import axios from './axios';
 import tagsLoad from './listSrc';
+import getFileName from './getFileName';
 
 const getLinks = (html, hostname) => {
   const $ = cheerio.load(html);
@@ -16,7 +17,10 @@ const getLinks = (html, hostname) => {
       const uri = url.parse(current);
       uri.hostname = uri.hostname || url.parse(hostname).hostname;
       uri.protocol = uri.protocol || url.parse(hostname).protocol;
-      acc.push(url.format(uri));
+      const formatedLink = url.format(uri);
+      if (acc.indexOf(formatedLink) === -1) {
+        acc.push(url.format(uri));
+      }
     });
     return acc;
   }, []);
@@ -28,7 +32,8 @@ export default (html, hostname) => {
     axios.get(link, { responseType: 'arraybuffer' }));
   return Promise.all(promises)
   .then(data => data.map((file) => {
-    const pathSave = path.basename(file.config.url);
+    const ext = path.extname(file.config.url);
+    const pathSave = `${getFileName(file.config.url)}${ext}`;
     return { pathSave, data: file.data };
   }));
 };
