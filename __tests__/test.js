@@ -66,20 +66,39 @@ describe('test pageLoader', () => {
   });
 
 
-  it('test page saving', (done) => {
+  it('test page-loader', (done) => {
     pageLoader(address, dir)
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test.html'), 'utf8'))
-    .then(data => expect(data).toBe(pageLoaded))
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile1Loaded)))
-    .then(file1 => expect(file1.data).toBe(dataFile1.data))
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile2Loaded)))
-    .then(file2 => expect(file2.data).toBe(dataFile2.data))
-    .then(() => fs.readFile(path.resolve(dir, 'localhost-test_files', nameFile3Loaded)))
-    .then(file3 => expect(file3.data).toBe(dataFile3.data))
-    .catch((err) => {
-      console.log(err);
+    .then(() => {
+      const dataPage = fs.readFileSync(path.resolve(dir, 'localhost-test.html'), 'utf8');
+      expect(dataPage).toBe(pageLoaded);
+      const file1 = fs.readFileSync(path.resolve(dir, 'localhost-test_files', nameFile1Loaded));
+      expect(file1).toBeDefined();
+      const file2 = fs.readFileSync(path.resolve(dir, 'localhost-test_files', nameFile2Loaded));
+      expect(file2).toBeDefined();
+      const file3 = fs.readFileSync(path.resolve(dir, 'localhost-test_files', nameFile3Loaded));
+      expect(file3).toBeDefined();
+      done();
     })
-    .then(done());
+    .catch(done.fail);
+  });
+  it('test page-loader errors', (done) => {
+    pageLoader('wrong_address', dir)
+    .catch((err) => {
+      expect(err.message).toBe('Incorrect address(must be as \'http://examle.com\')');
+      done();
+    });
+
+    pageLoader('http://localhost/wrong_page', dir)
+    .catch((err) => {
+      expect(err.statusCode).toBe(404);
+      done();
+    });
+
+    pageLoader(address, dir)
+    .catch((err) => {
+      expect(err.message).toBe(`EEXIST: file already exists, mkdir '${dir}${path.sep}localhost-test_files'`);
+      done();
+    });
   });
 });
 
