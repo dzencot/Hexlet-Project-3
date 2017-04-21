@@ -13,6 +13,9 @@ lint:
 test:
 	npm run test
 
+test-debug:
+	DEBUG="page-loader:*" npm run test
+
 test-watch:
 	npm run test-watch
 

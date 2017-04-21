@@ -10,8 +10,9 @@ program
   .arguments('<address>')
   .action((address) => {
     loader(address, program.output)
-    .then(() => process.exit(process.exitCode))
+    .then(() => process.exit(0))
     .catch((err) => {
+      console.log(err);
       switch (err.code) {
         case 'ENOTFOUND':
           console.error(chalk.red(`404: page '${err.config.url}' not found.`));
@@ -19,7 +20,7 @@ program
         default:
           console.error(chalk.red(err.message));
       }
-      return process.stderr;
+      process.exit(1);
     });
   })
   .description('Download page')

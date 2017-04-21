@@ -35,9 +35,9 @@ describe('test pageLoader', () => {
     <h1>Test</h1>
     <p>data</p>
     <img>
-    <link rel="shorcut icon" type="image/x-icon" href="localhost-test_files${path.sep}favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6.ico">
-    <img src="localhost-test_files${path.sep}favicon-196x196-422632c0ef41e9b13dd7ea89f1764e860d225ca3c20502b966a00c0039409a75.png">
-    <script src="localhost-test_files${path.sep}application-4a22ec64913e57f9d297149cd20cb001db20febca800210f48729059b5103819.js" async="async" crossorigin="anonymous" onload="onApplicationJsLoaded(this)" onerror="onScriptLoadError(this)"></script>
+    <link rel="shorcut icon" type="image/x-icon" href="localhost-test_files${path.sep}localhost-test-page-files-favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6-ico.ico">
+    <img src="localhost-test_files${path.sep}localhost-test-page-files-favicon-196x196-422632c0ef41e9b13dd7ea89f1764e860d225ca3c20502b966a00c0039409a75-png.png">
+    <script src="localhost-test_files${path.sep}localhost-test-page-files-application-4a22ec64913e57f9d297149cd20cb001db20febca800210f48729059b5103819-js.js" async="async" crossorigin="anonymous" onload="onApplicationJsLoaded(this)" onerror="onScriptLoadError(this)"></script>
   </body>
 </html>
 `;
@@ -77,14 +77,14 @@ describe('test pageLoader', () => {
       expect(file2).toBeDefined();
       const file3 = fs.readFileSync(path.resolve(dir, 'localhost-test_files', nameFile3Loaded));
       expect(file3).toBeDefined();
-      done();
     })
-    .catch(done.fail);
+    .catch(done.fail)
+    .then(done);
   });
   it('test page-loader errors', (done) => {
     pageLoader('wrong_address', dir)
     .catch((err) => {
-      expect(err.message).toBe('Incorrect address(must be as \'http://examle.com\')');
+      expect(err.message).toBe('Incorrect address(must be as \'http://example.com\')');
       done();
     });
 
@@ -96,7 +96,8 @@ describe('test pageLoader', () => {
 
     pageLoader(address, dir)
     .catch((err) => {
-      expect(err.message).toBe(`EEXIST: file already exists, mkdir '${dir}${path.sep}localhost-test_files'`);
+      const result = err.message.match(/^ENOTEMPTY/);
+      expect(result[0]).toBe('ENOTEMPTY');
       done();
     });
   });
