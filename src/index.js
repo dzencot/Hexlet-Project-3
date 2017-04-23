@@ -31,7 +31,6 @@ export default (address, dir = '.', task = undefined) => {
   })
   .then(() => axios.get(address))
   .then((response) => {
-    let links;
     loaderDebug(`address: '${address}'`);
     loaderDebug(`output: '${dir}'`);
     httpDebug('Page have been loaded.');
@@ -53,10 +52,7 @@ export default (address, dir = '.', task = undefined) => {
       });
       return Promise.all(promises);
     })
-    .then((_links) => {
-      loaderDebug('Resources have been saved.');
-      links = _links;
-    });
+    .then(() => loaderDebug('Resources have been saved.'));
     return Promise.all([promiseFilesSave, promisePageSave])
       .then(() => fs.readFile(path.resolve(tempDir, `${filePageName}.html`)))
       .then(data => fs.writeFile(path.resolve(dir, `${filePageName}.html`), data))
@@ -69,8 +65,7 @@ export default (address, dir = '.', task = undefined) => {
           .then(data => fs.writeFile(path.resolve(dir, `${filePageName}_files`, name), data));
         });
         return Promise.all(promises);
-      })
-      .then(() => links);
+      });
   });
 };
 
