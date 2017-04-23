@@ -96,8 +96,7 @@ describe('test pageLoader', () => {
 
     pageLoader(address, dir)
     .catch((err) => {
-      const result = err.message.match(/^ENOTEMPTY/);
-      expect(result[0]).toBe('ENOTEMPTY');
+      expect(err.code).toBe('EEXIST');
       done();
     });
   });

@@ -54,11 +54,17 @@ export default (address, dir = '.') => {
     .then(() => loaderDebug('Resources have been saved.'));
     return Promise.all([promiseFilesSave, promisePageSave]);
   })
-  .then(() => {
-    const source = path.resolve(tempDir, `${filePageName}.html`);
-    const dest = path.resolve(dir, `${filePageName}.html`);
-    const destFilesDir = path.resolve(dir, `${filePageName}_files`);
-    return Promise.all([fs.rename(source, dest), fs.rename(filesDir, destFilesDir)]);
+  .then(() => fs.readFile(path.resolve(tempDir, `${filePageName}.html`)))
+  .then(data => fs.writeFile(path.resolve(dir, `${filePageName}.html`), data))
+  .then(() => fs.mkdir(path.resolve(dir, `${filePageName}_files`)))
+  .then(() => fs.readdir(filesDir))
+  .then((files) => {
+    const promises = files.map((file) => {
+      const name = path.basename(file);
+      return fs.readFile(path.resolve(filesDir, file))
+      .then(data => fs.writeFile(path.resolve(dir, `${filePageName}_files`, name), data));
+    });
+    return Promise.all(promises);
   });
 };
 
