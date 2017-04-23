@@ -3,6 +3,7 @@
 
 import program from 'commander';
 import chalk from 'chalk';
+import Listr from 'listr';
 import loader from '..';
 
 program
@@ -10,9 +11,20 @@ program
   .arguments('<address>')
   .action((address) => {
     loader(address, program.output)
+    .then((data) => {
+      const promises = data.map((link) => {
+        const tasks = new Listr([
+          {
+            title: `Page ${link} loaded`,
+            task: () => {},
+          },
+        ]);
+        return tasks.run();
+      });
+      return Promise.all(promises);
+    })
     .then(() => process.exit(0))
     .catch((err) => {
-      console.log(err);
       switch (err.code) {
         case 'ENOTFOUND':
           console.error(chalk.red(`404: page '${err.config.url}' not found.`));

@@ -31,6 +31,7 @@ export default (address, dir = '.') => {
   })
   .then(() => axios.get(address))
   .then((response) => {
+    let links;
     loaderDebug(`address: '${address}'`);
     loaderDebug(`output: '${dir}'`);
     httpDebug('Page have been loaded.');
@@ -47,24 +48,29 @@ export default (address, dir = '.') => {
         .then(() => {
           osDebug(`File saved '${file.pathSave}'`);
           pathDebug(`path: '${filePath}'`);
+          return file.url;
         });
       });
       return Promise.all(promises);
     })
-    .then(() => loaderDebug('Resources have been saved.'));
-    return Promise.all([promiseFilesSave, promisePageSave]);
-  })
-  .then(() => fs.readFile(path.resolve(tempDir, `${filePageName}.html`)))
-  .then(data => fs.writeFile(path.resolve(dir, `${filePageName}.html`), data))
-  .then(() => fs.mkdir(path.resolve(dir, `${filePageName}_files`)))
-  .then(() => fs.readdir(filesDir))
-  .then((files) => {
-    const promises = files.map((file) => {
-      const name = path.basename(file);
-      return fs.readFile(path.resolve(filesDir, file))
-      .then(data => fs.writeFile(path.resolve(dir, `${filePageName}_files`, name), data));
+    .then((_links) => {
+      loaderDebug('Resources have been saved.');
+      links = _links;
     });
-    return Promise.all(promises);
+    return Promise.all([promiseFilesSave, promisePageSave])
+      .then(() => fs.readFile(path.resolve(tempDir, `${filePageName}.html`)))
+      .then(data => fs.writeFile(path.resolve(dir, `${filePageName}.html`), data))
+      .then(() => fs.mkdir(path.resolve(dir, `${filePageName}_files`)))
+      .then(() => fs.readdir(filesDir))
+      .then((files) => {
+        const promises = files.map((file) => {
+          const name = path.basename(file);
+          return fs.readFile(path.resolve(filesDir, file))
+          .then(data => fs.writeFile(path.resolve(dir, `${filePageName}_files`, name), data));
+        });
+        return Promise.all(promises);
+      })
+      .then(() => links);
   });
 };
 
