@@ -1,10 +1,8 @@
 // @flow
-/* eslint no-console: 0 */
 
 import cheerio from 'cheerio';
 import path from 'path';
 import debug from 'debug';
-import chalk from 'chalk';
 import axios from './axios';
 import tagsLoad from './listSrc';
 import getFileName from './getFileName';
@@ -28,13 +26,18 @@ const getLinks = (html, hostname) => {
   }, []);
 };
 
-export default (html, hostname) => {
+export default (html, hostname, task) => {
   const links = getLinks(html, hostname);
-  const promises = links.map(link => axios.get(link, { responseType: 'arraybuffer' })
-  .catch((err) => {
-    sourceFailLoad(err);
-    console.error(chalk.yellow(`✗ ${link} skipped: ${err.message}`));
-  }));
+  const promises = links.map((link) => {
+    if (task) {
+      return Promise.resolve(task(link, axios.get, { responseType: 'arraybuffer' }));
+    }
+    return axios.get(link, { responseType: 'arraybuffer' })
+    .catch((err) => {
+      sourceFailLoad(err);
+      return err;
+    });
+  });
   return Promise.all(promises)
   .then(data => data.filter(file => file))
   .then(data => data.map((file) => {

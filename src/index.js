@@ -14,7 +14,7 @@ const osDebug = debug('page-loader:os');
 const pathDebug = debug('page-loader:path');
 const loaderDebug = debug('page-loader:loader');
 
-export default (address, dir = '.') => {
+export default (address, dir = '.', task = undefined) => {
   let filePageName;
   let filesDir;
   let tempDir;
@@ -41,7 +41,7 @@ export default (address, dir = '.') => {
     .then(() => osDebug('Page have been saved.'));
     const promiseFilesSave = fs.mkdir(filesDir)
     .then(() => osDebug(`Dir '${filesDir}' created.`))
-    .then(() => getSrces(response.data, address)).then((files) => {
+    .then(() => getSrces(response.data, address, task)).then((files) => {
       const promises = files.map((file) => {
         const filePath = path.resolve(filesDir, file.pathSave);
         return fs.writeFile(filePath, file.data)
