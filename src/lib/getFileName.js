@@ -7,6 +7,8 @@ export default (address) => {
   if (!url.hostname) {
     throw new Error('Incorrect address(must be as \'http://example.com\')');
   }
-  return `${url.hostname}${url.pathname || ''}`.replace(/[^0-9a-z]/gi, '-');
+  const result = `${url.hostname}${url.pathname || ''}`.replace(/[^0-9a-z]/gi, '-');
+  // TODO: max length file name
+  return result;
 };
 
