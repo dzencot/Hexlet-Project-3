@@ -7,18 +7,18 @@ Count](https://lima.codeclimate.com/github/dzencot/project-lvl3-s71/badges/issue
 [![Build
 Status](https://travis-ci.org/dzencot/project-lvl3-s71.svg?branch=master)](https://travis-ci.org/dzencot/project-lvl3-s71)
 [![asciicast](https://asciinema.org/a/4blo81bj4ogtxzisb88wb4w6e.png)](https://asciinema.org/a/4blo81bj4ogtxzisb88wb4w6e)
-# Hexlet project L3 #
-## Install: ##
+# Загрузщик страниц #
+## Установка: ##
 ```
   git clone https://github.com/dzencot/project-lvl3-s71 page_loader
   cd page_loader
   make install
 ```
-## Usage: ##
+## Использование: ##
 ```
   make run 1=http://your_page
 ```
-Or:
+Другой способ:
 ```
   make build
   node dist/bin/page_loader.js --help
